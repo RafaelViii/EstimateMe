@@ -1,0 +1,272 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--surface:#161616;--surface2:#1E1E1E;--surface3:#252525;
+  --border:#2C2C2C;--border2:#363636;
+  --text:#F2EFE8;--muted:#7A7872;--muted2:#9E9B94;
+  --accent:#D4A843;--accent-dim:#2A2010;
+  --danger:#E05252;--success:#4CAF82;
+  --r:10px;--r2:14px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-size:14px;min-height:100vh}
+.app{max-width:430px;margin:0 auto;padding:0 0 100px}
+.header{padding:24px 20px 0;display:flex;flex-direction:column;gap:4px}
+.header-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace}
+.project-input{background:transparent;border:none;outline:none;color:var(--text);font-family:'Syne',sans-serif;font-size:22px;font-weight:700;width:100%;padding:4px 0}
+.project-input::placeholder{color:var(--border2)}
+.client-input{background:transparent;border:none;outline:none;color:var(--muted2);font-family:'Syne',sans-serif;font-size:13px;width:100%}
+.client-input::placeholder{color:var(--border)}
+.tabs{display:flex;padding:20px 20px 0;gap:4px}
+.tab{flex:1;padding:9px;background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r);color:var(--muted);font-family:'Syne',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:center;letter-spacing:.05em;transition:all .15s}
+.tab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.section{margin:16px 20px 0}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace}
+.add-btn{background:transparent;border:0.5px solid var(--border2);border-radius:20px;color:var(--muted2);padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Syne',sans-serif;transition:all .15s}
+.add-btn:hover{border-color:var(--accent);color:var(--accent)}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);padding:14px}
+.card+.card{margin-top:8px}
+.input-row{display:flex;gap:8px;align-items:center}
+.field{display:flex;flex-direction:column;gap:4px;flex:1}
+.field-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.08em}
+.field input{background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'Syne',sans-serif;font-size:13px;outline:none;width:100%;transition:border .15s}
+.field input:focus{border-color:var(--accent)}
+.field input::placeholder{color:var(--border2)}
+.diff-row{display:flex;gap:5px;margin-top:10px}
+.diff-btn{flex:1;padding:7px 2px;background:var(--surface2);border:0.5px solid var(--border);border-radius:7px;color:var(--muted);font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;text-align:center;transition:all .15s;font-weight:500}
+.diff-btn.d1.sel{background:#0F1E12;border-color:#4CAF82;color:#4CAF82}
+.diff-btn.d2.sel{background:#1A1F0E;border-color:#8AB836;color:#8AB836}
+.diff-btn.d3.sel{background:#201C0A;border-color:#D4A843;color:#D4A843}
+.diff-btn.d4.sel{background:#1E120A;border-color:#E07D3A;color:#E07D3A}
+.diff-btn.d5.sel{background:#1E0C0C;border-color:#E05252;color:#E05252}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border)}
+.task-price{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--accent)}
+.del-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:6px;transition:color .15s;line-height:1}
+.del-btn:hover{color:var(--danger)}
+.settings-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);padding:14px;display:flex;gap:10px}
+.total-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:0.5px solid var(--border);padding:14px 20px 20px}
+.total-inner{max-width:430px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.total-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:3px}
+.total-amount{font-family:'DM Mono',monospace;font-size:24px;font-weight:500;color:var(--accent);letter-spacing:-.02em}
+.share-btn{background:var(--accent);border:none;border-radius:var(--r);color:#000;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;padding:11px 18px;cursor:pointer;white-space:nowrap}
+.diff-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;background:currentColor}
+.preview-wrap{margin:16px 20px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.preview-top{padding:22px 20px 18px;border-bottom:0.5px solid var(--border)}
+.preview-title{font-size:18px;font-weight:700;margin-bottom:2px}
+.preview-client{font-size:12px;color:var(--muted2)}
+.preview-date{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:8px}
+.preview-section{padding:14px 20px}
+.preview-section-title{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:10px}
+.line-item{display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;gap:10px}
+.line-item+.line-item{border-top:0.5px solid var(--border)}
+.li-left{}
+.li-name{font-size:13px;font-weight:500;margin-bottom:3px}
+.li-meta{font-size:11px;color:var(--muted2)}
+.li-price{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;white-space:nowrap}
+.preview-total{padding:14px 20px 18px;border-top:0.5px solid var(--border2);display:flex;justify-content:space-between;align-items:flex-end}
+.preview-breakdown{font-size:11px;color:var(--muted2);line-height:1.8}
+.preview-big{font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:var(--accent);text-align:right}
+.preview-big-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-align:right;margin-bottom:2px}
+.empty-state{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px}
+</style>
+
+<div class="app" id="root"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script>
+const {useState,useCallback} = React;
+const uid = ()=>Math.random().toString(36).slice(2,9);
+const fmt = n=>n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+const DIFF = [
+  {label:'Easy',mult:1.0,cls:'d1'},
+  {label:'Low',mult:1.5,cls:'d2'},
+  {label:'Mid',mult:2.0,cls:'d3'},
+  {label:'High',mult:3.0,cls:'d4'},
+  {label:'Hard',mult:4.5,cls:'d5'},
+];
+
+function TaskCard({task,baseRate,onChange,onDelete}){
+  const d = DIFF[task.diff];
+  const price = (parseFloat(task.hours)||0)*parseFloat(baseRate||0)*d.mult;
+  return React.createElement('div',{className:'card'},
+    React.createElement('div',{className:'input-row'},
+      React.createElement('div',{className:'field',style:{flex:2}},
+        React.createElement('span',{className:'field-label'},'Task name'),
+        React.createElement('input',{placeholder:'e.g. Logo design',value:task.name,onChange:e=>onChange({...task,name:e.target.value})})
+      ),
+      React.createElement('div',{className:'field',style:{flex:'0 0 72px'}},
+        React.createElement('span',{className:'field-label'},'Hours'),
+        React.createElement('input',{type:'number',min:0,placeholder:'0',value:task.hours,onChange:e=>onChange({...task,hours:e.target.value}),style:{textAlign:'center'}})
+      )
+    ),
+    React.createElement('div',{className:'diff-row'},
+      DIFF.map((d2,i)=>
+        React.createElement('button',{key:i,className:`diff-btn ${d2.cls}${task.diff===i?' sel':''}`,onClick:()=>onChange({...task,diff:i})},d2.label)
+      )
+    ),
+    React.createElement('div',{className:'card-footer'},
+      React.createElement('span',{style:{fontSize:'11px',color:'var(--muted2)'}},
+        `${d.mult}x mult · ${parseFloat(task.hours)||0}h`
+      ),
+      React.createElement('div',{style:{display:'flex',alignItems:'center',gap:8}},
+        React.createElement('span',{className:'task-price'},`₱ ${fmt(price)}`),
+        React.createElement('button',{className:'del-btn',onClick:onDelete},'×')
+      )
+    )
+  );
+}
+
+function OverheadCard({item,onChange,onDelete}){
+  return React.createElement('div',{className:'card'},
+    React.createElement('div',{className:'input-row'},
+      React.createElement('div',{className:'field',style:{flex:2}},
+        React.createElement('span',{className:'field-label'},'Description'),
+        React.createElement('input',{placeholder:'e.g. Software license',value:item.name,onChange:e=>onChange({...item,name:e.target.value})})
+      ),
+      React.createElement('div',{className:'field',style:{flex:'0 0 100px'}},
+        React.createElement('span',{className:'field-label'},'Amount'),
+        React.createElement('input',{type:'number',min:0,placeholder:'0.00',value:item.amount,onChange:e=>onChange({...item,amount:e.target.value}),style:{textAlign:'right'}})
+      ),
+      React.createElement('button',{className:'del-btn',style:{marginTop:18},onClick:onDelete},'×')
+    )
+  );
+}
+
+function App(){
+  const [tab,setTab]=useState('build');
+  const [project,setProject]=useState('');
+  const [client,setClient]=useState('');
+  const [baseRate,setBaseRate]=useState('');
+  const [margin,setMargin]=useState('');
+  const [currency,setCurrency]=useState('₱');
+  const [tasks,setTasks]=useState([{id:uid(),name:'',hours:'',diff:0}]);
+  const [overheads,setOverheads]=useState([]);
+
+  const addTask=()=>setTasks(t=>[...t,{id:uid(),name:'',hours:'',diff:0}]);
+  const delTask=id=>setTasks(t=>t.filter(x=>x.id!==id));
+  const updateTask=(id,val)=>setTasks(t=>t.map(x=>x.id===id?val:x));
+
+  const addOH=()=>setOverheads(o=>[...o,{id:uid(),name:'',amount:''}]);
+  const delOH=id=>setOverheads(o=>o.filter(x=>x.id!==id));
+  const updateOH=(id,val)=>setOverheads(o=>o.map(x=>x.id===id?val:x));
+
+  const tasksTotal=tasks.reduce((s,t)=>{
+    const d=DIFF[t.diff];
+    return s+(parseFloat(t.hours)||0)*(parseFloat(baseRate)||0)*d.mult;
+  },0);
+  const ohTotal=overheads.reduce((s,o)=>s+(parseFloat(o.amount)||0),0);
+  const sub=tasksTotal+ohTotal;
+  const marginAmt=sub*(parseFloat(margin)||0)/100;
+  const grand=sub+marginAmt;
+
+  const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  const buildView=React.createElement('div',null,
+    React.createElement('div',{className:'section'},
+      React.createElement('div',{className:'settings-card'},
+        React.createElement('div',{className:'field'},
+          React.createElement('span',{className:'field-label'},'Base rate / hr'),
+          React.createElement('input',{type:'number',min:0,placeholder:'0',value:baseRate,onChange:e=>setBaseRate(e.target.value)})
+        ),
+        React.createElement('div',{className:'field'},
+          React.createElement('span',{className:'field-label'},'Margin %'),
+          React.createElement('input',{type:'number',min:0,max:100,placeholder:'0',value:margin,onChange:e=>setMargin(e.target.value)})
+        ),
+        React.createElement('div',{className:'field',style:{flex:'0 0 62px'}},
+          React.createElement('span',{className:'field-label'},'Currency'),
+          React.createElement('input',{placeholder:'₱',value:currency,onChange:e=>setCurrency(e.target.value),style:{textAlign:'center'}})
+        )
+      )
+    ),
+    React.createElement('div',{className:'section'},
+      React.createElement('div',{className:'section-header'},
+        React.createElement('span',{className:'section-title'},'Tasks'),
+        React.createElement('button',{className:'add-btn',onClick:addTask},'+ Add task')
+      ),
+      tasks.map(t=>React.createElement(TaskCard,{key:t.id,task:t,baseRate,onChange:v=>updateTask(t.id,v),onDelete:()=>delTask(t.id)}))
+    ),
+    React.createElement('div',{className:'section'},
+      React.createElement('div',{className:'section-header'},
+        React.createElement('span',{className:'section-title'},'Overhead & Costs'),
+        React.createElement('button',{className:'add-btn',onClick:addOH},'+ Add cost')
+      ),
+      overheads.length===0
+        ? React.createElement('div',{className:'empty-state'},'No overhead costs added')
+        : overheads.map(o=>React.createElement(OverheadCard,{key:o.id,item:o,onChange:v=>updateOH(o.id,v),onDelete:()=>delOH(o.id)}))
+    )
+  );
+
+  const previewView=React.createElement('div',null,
+    React.createElement('div',{className:'preview-wrap'},
+      React.createElement('div',{className:'preview-top'},
+        React.createElement('div',{className:'preview-title'},project||'Untitled Project'),
+        React.createElement('div',{className:'preview-client'},client?`Prepared for: ${client}`:'Client name'),
+        React.createElement('div',{className:'preview-date'},`Date: ${today}`)
+      ),
+      tasks.some(t=>t.name||t.hours)&&React.createElement('div',{className:'preview-section'},
+        React.createElement('div',{className:'preview-section-title'},'Services'),
+        tasks.filter(t=>t.name||t.hours).map(t=>{
+          const d=DIFF[t.diff];
+          const price=(parseFloat(t.hours)||0)*(parseFloat(baseRate)||0)*d.mult;
+          return React.createElement('div',{key:t.id,className:'line-item'},
+            React.createElement('div',{className:'li-left'},
+              React.createElement('div',{className:'li-name'},t.name||'Unnamed task'),
+              React.createElement('div',{className:'li-meta'},`${parseFloat(t.hours)||0}h · ${d.label} (${d.mult}x)`)
+            ),
+            React.createElement('div',{className:'li-price'},`${currency} ${fmt(price)}`)
+          );
+        })
+      ),
+      overheads.some(o=>o.name||o.amount)&&React.createElement('div',{className:'preview-section',style:{borderTop:'0.5px solid var(--border)'}},
+        React.createElement('div',{className:'preview-section-title'},'Additional Costs'),
+        overheads.filter(o=>o.name||o.amount).map(o=>
+          React.createElement('div',{key:o.id,className:'line-item'},
+            React.createElement('div',{className:'li-name'},o.name||'Cost item'),
+            React.createElement('div',{className:'li-price'},`${currency} ${fmt(parseFloat(o.amount)||0)}`)
+          )
+        )
+      ),
+      React.createElement('div',{className:'preview-total'},
+        React.createElement('div',{className:'preview-breakdown'},
+          React.createElement('span',null,`Subtotal: ${currency} ${fmt(sub)}`),React.createElement('br'),
+          parseFloat(margin)>0&&React.createElement('span',null,`Margin (${margin}%): ${currency} ${fmt(marginAmt)}`)
+        ),
+        React.createElement('div',null,
+          React.createElement('div',{className:'preview-big-label'},'TOTAL'),
+          React.createElement('div',{className:'preview-big'},`${currency} ${fmt(grand)}`)
+        )
+      )
+    )
+  );
+
+  return React.createElement('div',null,
+    React.createElement('div',{className:'header'},
+      React.createElement('span',{className:'header-label'},'Project'),
+      React.createElement('input',{className:'project-input',placeholder:'Project name',value:project,onChange:e=>setProject(e.target.value)}),
+      React.createElement('input',{className:'client-input',placeholder:'Client name',value:client,onChange:e=>setClient(e.target.value)})
+    ),
+    React.createElement('div',{className:'tabs'},
+      React.createElement('button',{className:`tab${tab==='build'?' active':''}`,onClick:()=>setTab('build')},'Build'),
+      React.createElement('button',{className:`tab${tab==='preview'?' active':''}`,onClick:()=>setTab('preview')},'Preview')
+    ),
+    tab==='build'?buildView:previewView,
+    React.createElement('div',{className:'total-bar'},
+      React.createElement('div',{className:'total-inner'},
+        React.createElement('div',null,
+          React.createElement('div',{className:'total-label'},'Total estimate'),
+          React.createElement('div',{className:'total-amount'},`${currency} ${fmt(grand)}`)
+        ),
+        tab==='build'
+          ? React.createElement('button',{className:'share-btn',onClick:()=>setTab('preview')},'Preview →')
+          : React.createElement('button',{className:'share-btn',onClick:()=>window.print()},'Export')
+      )
+    )
+  );
+}
+
+ReactDOM.render(React.createElement(App),document.getElementById('root'));
+</script>
